@@ -3,8 +3,8 @@ from time import sleep
 from perlin import PerlinNoiseFactory
 from more import visualizeNoise, mapCollapse, mapCleaner
 
-size = 40
-res = 5
+size = 80
+res = 15
 frames = 20
 frameres = 5
 space_range = size // res
@@ -22,8 +22,4 @@ for x in range(size):
         newArray[x].append(n + 0.5)
 
 newArray = mapCollapse(newArray)
-visualizeNoise(newArray, size, size)
-
-sleep(2)
-newArray = mapCleaner(newArray)
 visualizeNoise(newArray, size, size)
