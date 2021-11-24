@@ -17,6 +17,36 @@ def mapCollapseTest(tempArray, cutoffValue=0.5):
     pass
   return tempArray
 
+def Reverse(tempArray):
+  x = len(tempArray)
+  y = len(tempArray[0])
+  
+  for yi in range(0,y):
+    for xi in range(0,x):
+      if tempArray[xi][yi] == 0:
+        tempArray[xi][yi] = 1
+        continue
+      elif tempArray[xi][yi] == 1:
+        tempArray[xi][yi] = 0
+        continue
+      pass
+    pass
+  return tempArray
+
+def drawPixels(tempArray, widthOfMap, heightOfMap, pixelSize):
+        # Graphically shows "newArray" by printing units to the graph class
+    global graph
+    graph.erase()
+    for yi in range(0,heightOfMap):
+        for xi in range(0,widthOfMap):
+            if tempArray[xi][yi] == 1:
+                graph.draw_rectangle(
+                    (xi*pixelSize,(yi*pixelSize)+pixelSize),
+                    ((xi*pixelSize)+pixelSize,yi*pixelSize),
+                    fill_color="Black")
+                continue
+            pass
+        pass
 
     # Dimentions of the planned map; how many units
 widthOfMap = 400
@@ -36,32 +66,30 @@ for x in range(widthOfMap):
         n = pnf(x / res, y / res)
         newArray[x].append(n + 0.5)
 
-    # Calls function to "Collapse" values into either 0 or 1
-newArray = mapCollapseTest(newArray)
-
     # Starts and displays a window with a simple graph
 myGraph = sg.Graph(
-  (widthOfMap*pixelSize,heightOfMap*pixelSize),
-  (0,0),
-  (widthOfMap*pixelSize,heightOfMap*pixelSize),
-  background_color='White', key='graph')
-window = sg.Window('Windowzzz', layout=[[myGraph]], margins=(0,0),location=(0,0)).finalize()
+    (widthOfMap*pixelSize,heightOfMap*pixelSize),
+    (0,0),
+    (widthOfMap*pixelSize,heightOfMap*pixelSize),
+    background_color='White',
+    key='graph')
+window = sg.Window(
+    'Windowzzz',
+    layout=[[myGraph],[sg.Button("Shift Color")]],
+    margins=(0,0),
+    location=(0,0)
+    ).finalize()
 graph = window['graph']
 
-    # Graphically shows "newArray" by printing units to the graph class
-for yi in range(0,heightOfMap):
-    for xi in range(0,widthOfMap):
-        if newArray[xi][yi] == 1:
-            graph.draw_rectangle(
-                (xi*pixelSize,(yi*pixelSize)+pixelSize),
-                ((xi*pixelSize)+pixelSize,yi*pixelSize),
-                fill_color="Black")
-            continue
-        pass
-    pass
+    # Calls function to "Collapse" values into either 0 or 1
+newArray = mapCollapseTest(newArray)
+drawPixels(newArray, widthOfMap, heightOfMap, pixelSize)
 
 while True:
     event, values = window.read()
+    if event == "Shift Color":
+        newArray = Reverse(newArray)
+        drawPixels(newArray, widthOfMap, heightOfMap, pixelSize)
     if event == sg.WIN_CLOSED:
         break
 
